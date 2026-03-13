@@ -42,10 +42,15 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
       
+      - name: Move build to root
+        run: |
+          mv frontend/dist/* .
+          echo "Base path set to /beerapp/" > .nojekyll
+      
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './frontend/dist'
+          path: '.'
       
       - name: Deploy to GitHub Pages
         id: deployment
