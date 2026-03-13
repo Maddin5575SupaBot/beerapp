@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BeerApp - Page Not Found</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        background: linear-gradient(135deg, #1a0f0f 0%, #2d1b1b 100%);
+        color: #fbbf24;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .container {
+        text-align: center;
+        padding: 2rem;
+        max-width: 600px;
+      }
+      h1 {
+        font-size: 4rem;
+        margin: 0;
+        color: #f59e0b;
+      }
+      h2 {
+        font-size: 2rem;
+        margin: 1rem 0;
+        color: #d97706;
+      }
+      p {
+        font-size: 1.2rem;
+        color: #fbbf24;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+      }
+      .beer-icon {
+        font-size: 5rem;
+        margin-bottom: 1rem;
+        animation: bubble 2s infinite ease-in-out;
+      }
+      @keyframes bubble {
+        0%, 100% { transform: translateY(0) scale(1); }
+        50% { transform: translateY(-10px) scale(1.1); }
+      }
+      .button {
+        display: inline-block;
+        background: #d97706;
+        color: #1a0f0f;
+        padding: 1rem 2rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        border: 2px solid #f59e0b;
+      }
+      .button:hover {
+        background: #f59e0b;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+      }
+      .warning {
+        background: rgba(220, 38, 38, 0.2);
+        border: 1px solid rgba(220, 38, 38, 0.5);
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-top: 2rem;
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="beer-icon">🍺</div>
+      <h1>404</h1>
+      <h2>Page Not Found</h2>
+      <p>Looks like this beer hasn't been brewed yet! The page you're looking for doesn't exist.</p>
+      <a href="/beerapp/" class="button">Back to BeerApp</a>
+      
+      <div class="warning">
+        <strong>⚠️ Safety Reminder:</strong> Always drink responsibly. Never drink and drive.
+      </div>
+      
+      <script>
+        // Redirect to main app after 5 seconds
+        setTimeout(() => {
+          window.location.href = '/beerapp/';
+        }, 5000);
+      </script>
+    </div>
+  </body>
+</html>
