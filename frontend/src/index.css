@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply antialiased;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-beer-amber hover:bg-beer-yellow text-beer-dark font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 active:scale-95;
+  }
+  
+  .btn-secondary {
+    @apply bg-transparent border-2 border-beer-amber text-beer-amber hover:bg-beer-amber hover:text-beer-dark font-semibold py-3 px-6 rounded-lg transition-all duration-300;
+  }
+  
+  .card-beer {
+    @apply bg-beer-brown/30 backdrop-blur-sm border border-beer-amber/20 rounded-xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300;
+  }
+  
+  .input-beer {
+    @apply bg-beer-dark/50 border border-beer-amber/30 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-beer-amber focus:border-transparent;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-beer-yellow to-beer-amber bg-clip-text text-transparent;
+  }
+  
+  .bg-gradient-beer {
+    @apply bg-gradient-to-br from-beer-dark via-beer-brown to-beer-amber;
+  }
+  
+  .frosted-glass {
+    @apply backdrop-blur-md bg-white/5 border border-white/10;
+  }
+}
