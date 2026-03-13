@@ -27,9 +27,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: 'frontend/package-lock.json'
+          node-version: '24'
       
       - name: Install dependencies
         run: npm ci
@@ -42,15 +40,13 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
       
-      - name: Move build to root
-        run: |
-          mv frontend/dist/* .
-          echo "Base path set to /beerapp/" > .nojekyll
+      - name: Create .nojekyll file
+        run: echo "Base path set to /beerapp/" > frontend/dist/.nojekyll
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: './frontend/dist'
       
       - name: Deploy to GitHub Pages
         id: deployment
