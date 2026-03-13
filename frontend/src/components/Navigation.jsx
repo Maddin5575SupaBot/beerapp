@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { FaBeer, FaSearch, FaStar, FaUser, FaHome } from 'react-icons/fa'
+import { FaBeer, FaSearch, FaStar, FaUser, FaHome, FaCar, FaShieldAlt } from 'react-icons/fa'
 
 const Navigation = () => {
   const location = useLocation()
@@ -8,9 +8,9 @@ const Navigation = () => {
   const navItems = [
     { path: '/', label: 'Home', icon: <FaHome /> },
     { path: '/beers', label: 'Beers', icon: <FaBeer /> },
-    { path: '/search', label: 'Search', icon: <FaSearch /> },
-    { path: '/ratings', label: 'Ratings', icon: <FaStar /> },
-    { path: '/profile', label: 'Profile', icon: <FaUser /> },
+    { path: '/finder', label: 'Beer Finder', icon: <FaSearch /> },
+    { path: '/rate/1', label: 'Rate Beer', icon: <FaStar /> },
+    { path: '/safety', label: 'Drink n Drive', icon: <FaCar /> },
   ]
   
   return (

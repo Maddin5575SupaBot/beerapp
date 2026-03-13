@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
-import { FaSearch, FaStar, FaBeer, FaArrowRight } from 'react-icons/fa'
+import { FaSearch, FaStar, FaBeer, FaArrowRight, FaCar, FaShieldAlt } from 'react-icons/fa'
 import BeerCard from '../components/BeerCard'
+import { Link } from 'react-router-dom'
 
 const HomePage = () => {
   // Mock data for featured beers
@@ -44,17 +45,20 @@ const HomePage = () => {
     {
       icon: <FaSearch />,
       title: 'Discover',
-      description: 'Find new beers based on your taste preferences'
+      description: 'Find new beers based on your taste preferences',
+      path: '/finder'
     },
     {
       icon: <FaStar />,
       title: 'Rate',
-      description: 'Rate beers and share your reviews with the community'
+      description: 'Rate beers and share your reviews with the community',
+      path: '/rate/1'
     },
     {
-      icon: <FaBeer />,
-      title: 'Learn',
-      description: 'Learn about beer styles, brewing process, and more'
+      icon: <FaCar />,
+      title: 'Safety',
+      description: 'Drink n Drive safety calculator and educational tools',
+      path: '/safety'
     }
   ]
   
@@ -77,23 +81,37 @@ const HomePage = () => {
           from the world's largest beer community.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="btn-primary flex items-center justify-center gap-2"
-          >
-            <FaSearch />
-            <span>Explore Beers</span>
-            <FaArrowRight />
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="btn-secondary flex items-center justify-center gap-2"
-          >
-            <FaStar />
-            <span>Rate Beers</span>
-          </motion.button>
+          <Link to="/finder">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="btn-primary flex items-center justify-center gap-2"
+            >
+              <FaSearch />
+              <span>Explore Beers</span>
+              <FaArrowRight />
+            </motion.button>
+          </Link>
+          <Link to="/rate/1">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="btn-secondary flex items-center justify-center gap-2"
+            >
+              <FaStar />
+              <span>Rate Beers</span>
+            </motion.button>
+          </Link>
+          <Link to="/safety">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="btn-secondary flex items-center justify-center gap-2 bg-red-900/30 hover:bg-red-900/50 border-red-700/50"
+            >
+              <FaShieldAlt />
+              <span>Safety Tool</span>
+            </motion.button>
+          </Link>
         </div>
       </motion.section>
       
@@ -109,19 +127,20 @@ const HomePage = () => {
         </h2>
         <div className="grid md:grid-cols-3 gap-8">
           {features.map((feature, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 * index }}
-              className="card-beer text-center p-8"
-            >
-              <div className="text-4xl text-beer-yellow mb-4">
-                {feature.icon}
-              </div>
-              <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-              <p className="text-gray-300">{feature.description}</p>
-            </motion.div>
+            <Link key={index} to={feature.path}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * index }}
+                className="card-beer text-center p-8 hover:bg-beer-dark/50 transition-all duration-300 cursor-pointer"
+              >
+                <div className="text-4xl text-beer-yellow mb-4">
+                  {feature.icon}
+                </div>
+                <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
+                <p className="text-gray-300">{feature.description}</p>
+              </motion.div>
+            </Link>
           ))}
         </div>
       </motion.section>
