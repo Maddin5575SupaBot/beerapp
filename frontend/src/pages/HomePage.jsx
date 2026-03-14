@@ -21,7 +21,7 @@ const HomePage = () => {
       id: 2,
       icon: <FaStar className="text-3xl" />,
       title: t('rateBeer'),
-      description: 'Rate beers by country and help identify regional favorites',
+      description: 'Quick & fun rating - see top beers in your country',
       path: '/rate',
       color: 'from-brewery-gold to-beer-amber',
       buttonText: 'Rate Now',
