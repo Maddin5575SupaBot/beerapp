@@ -6,7 +6,7 @@ import BeerListPage from './pages/BeerListPage'
 import BeerDetailPage from './pages/BeerDetailPage'
 import Navigation from './components/Navigation'
 import BeerFinder from './components/BeerFinder'
-import DetailedRating from './components/DetailedRating'
+import RegionalBeerRating from './components/RegionalBeerRating'
 import DrinkDriveSafety from './components/DrinkDriveSafety'
 
 function App() {
@@ -20,11 +20,9 @@ function App() {
           <Route path="/beers" element={<BeerListPage />} />
           <Route path="/beer/:id" element={<BeerDetailPage />} />
           <Route path="/finder" element={<BeerFinder />} />
-          <Route path="/rate/:beerId" element={
-            <DetailedRating 
-              beerId={1} 
-              beerName="Sample Beer" 
-              onSubmit={(data) => console.log('Rating submitted:', data)}
+          <Route path="/rate" element={
+            <RegionalBeerRating 
+              onSubmit={(data) => console.log('Regional rating submitted:', data)}
             />
           } />
           <Route path="/safety" element={<DrinkDriveSafety />} />

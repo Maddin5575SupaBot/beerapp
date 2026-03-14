@@ -18,8 +18,8 @@ const HomePage = () => {
       id: 2,
       icon: <FaStar className="text-3xl" />,
       title: 'Rate Beer',
-      description: 'Rate and review your favorite beers',
-      path: '/rate/1',
+      description: 'Rate beers by country and help identify regional favorites',
+      path: '/rate',
       color: 'from-brewery-gold to-beer-amber',
       buttonText: 'Rate Now',
       delay: 0.2
