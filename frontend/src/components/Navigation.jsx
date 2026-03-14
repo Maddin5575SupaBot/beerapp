@@ -1,16 +1,20 @@
 import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { FaBeer, FaSearch, FaStar, FaUser, FaHome, FaCar, FaShieldAlt } from 'react-icons/fa'
+import { FaBeer, FaSearch, FaStar, FaUser, FaHome, FaCar, FaShieldAlt, FaGlobe, FaChevronDown } from 'react-icons/fa'
+import { useState } from 'react'
+import { useLanguage, LANGUAGES } from '../contexts/LanguageContext'
 
 const Navigation = () => {
   const location = useLocation()
+  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
+  const { language, changeLanguage, t } = useLanguage()
   
   const navItems = [
-    { path: '/', label: 'Home', icon: <FaHome /> },
-    { path: '/beers', label: 'Beers', icon: <FaBeer /> },
-    { path: '/finder', label: 'Beer Finder', icon: <FaSearch /> },
-    { path: '/rate/1', label: 'Rate Beer', icon: <FaStar /> },
-    { path: '/safety', label: 'Drink n Drive', icon: <FaCar /> },
+    { path: '/', label: t('home'), icon: <FaHome /> },
+    { path: '/beers', label: t('beers'), icon: <FaBeer /> },
+    { path: '/finder', label: t('beerFinder'), icon: <FaSearch /> },
+    { path: '/rate', label: t('rateBeer'), icon: <FaStar /> },
+    { path: '/safety', label: t('safety'), icon: <FaCar /> },
   ]
   
   return (
@@ -45,14 +49,55 @@ const Navigation = () => {
             ))}
           </div>
           
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="btn-primary hidden md:flex items-center gap-2"
-          >
-            <FaBeer />
-            <span>Sign In</span>
-          </motion.button>
+          <div className="flex items-center gap-4">
+            {/* Language Selector */}
+            <div className="relative">
+              <button
+                onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
+                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-beer-dark/50 border border-beer-amber/30 text-gray-300 hover:bg-beer-dark transition-colors"
+              >
+                <FaGlobe className="text-beer-amber" />
+                <span className="text-xl">{language.flag}</span>
+                <span className="hidden md:inline text-sm">{language.code.toUpperCase()}</span>
+                <FaChevronDown className={`text-gray-400 transition-transform ${showLanguageDropdown ? 'rotate-180' : ''}`} />
+              </button>
+              
+              {showLanguageDropdown && (
+                <div className="absolute right-0 mt-2 w-48 bg-beer-dark border border-beer-amber/20 rounded-lg shadow-xl z-50 max-h-64 overflow-y-auto">
+                  {LANGUAGES.map(lang => (
+                    <button
+                      key={lang.code}
+                      onClick={() => {
+                        changeLanguage(lang)
+                        setShowLanguageDropdown(false)
+                      }}
+                      className={`w-full px-4 py-3 flex items-center gap-3 hover:bg-beer-brown/30 transition-colors text-left ${
+                        language.code === lang.code ? 'bg-beer-amber/20' : ''
+                      }`}
+                    >
+                      <span className="text-2xl">{lang.flag}</span>
+                      <div className="flex-1">
+                        <div className="text-gray-300 font-medium">{lang.name}</div>
+                        <div className="text-sm text-gray-400">{lang.native}</div>
+                      </div>
+                      {language.code === lang.code && (
+                        <div className="w-2 h-2 rounded-full bg-beer-yellow"></div>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="btn-primary hidden md:flex items-center gap-2"
+            >
+              <FaBeer />
+              <span>{t('signIn')}</span>
+            </motion.button>
+          </div>
           
           {/* Mobile menu button */}
           <button className="md:hidden text-2xl text-beer-yellow">

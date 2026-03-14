@@ -1,13 +1,16 @@
 import { motion } from 'framer-motion'
 import { FaSearch, FaStar, FaBeer, FaCar, FaArrowRight } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
+import { useLanguage } from '../contexts/LanguageContext'
 
 const HomePage = () => {
+  const { t } = useLanguage()
+  
   const mainActions = [
     {
       id: 1,
       icon: <FaSearch className="text-3xl" />,
-      title: 'Find Beer',
+      title: t('beerFinder'),
       description: 'Discover beers by style, ABV, or ingredients',
       path: '/finder',
       color: 'from-beer-amber to-beer-yellow',
@@ -17,7 +20,7 @@ const HomePage = () => {
     {
       id: 2,
       icon: <FaStar className="text-3xl" />,
-      title: 'Rate Beer',
+      title: t('rateBeer'),
       description: 'Rate beers by country and help identify regional favorites',
       path: '/rate',
       color: 'from-brewery-gold to-beer-amber',
@@ -27,7 +30,7 @@ const HomePage = () => {
     {
       id: 3,
       icon: <FaCar className="text-3xl" />,
-      title: 'Safety Check',
+      title: t('safety'),
       description: 'Drink responsibly with our safety tools',
       path: '/safety',
       color: 'from-red-600 to-orange-500',
@@ -130,8 +133,8 @@ const HomePage = () => {
             className="text-center"
           >
             <p className="text-sm text-gray-400">
-              <span className="text-red-400 font-semibold">⚠️ IMPORTANT:</span> Always drink responsibly. 
-              Never drink and drive.
+              <span className="text-red-400 font-semibold">⚠️ {t('safetyFirst')}:</span> {t('drinkResponsibly')}. 
+              {t('neverDrinkAndDrive')}.
             </p>
           </motion.div>
         </div>
@@ -141,7 +144,7 @@ const HomePage = () => {
       <footer className="py-6 border-t border-beer-amber/10">
         <div className="container mx-auto px-4 text-center">
           <p className="text-gray-500 text-sm">
-            © 2026 BeerApp • Drink Responsibly • Data from <a href="https://punkapi.com/" className="text-beer-amber hover:text-beer-yellow">Punk API</a>
+            © 2026 BeerApp • {t('drinkResponsibly')} • Data from <a href="https://punkapi.com/" className="text-beer-amber hover:text-beer-yellow">Punk API</a>
           </p>
         </div>
       </footer>
