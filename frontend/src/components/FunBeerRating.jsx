@@ -24,6 +24,23 @@ const COUNTRIES = [
 // Fun beer emojis for ratings
 const BEER_EMOJIS = ['🍺', '🍻', '🥂', '🍷', '🥃', '🍸', '🍹', '🧉', '🧊']
 
+// Popular beer suggestions by country
+const POPULAR_BEER_SUGGESTIONS = {
+  'DE': ['Bitburger', 'Krombacher', 'Warsteiner', 'Beck\'s', 'Paulaner', 'Weihenstephaner'],
+  'BE': ['Stella Artois', 'Leffe Blonde', 'Duvel', 'Hoegaarden', 'Chimay', 'Westmalle'],
+  'CZ': ['Pilsner Urquell', 'Budweiser Budvar', 'Staropramen', 'Kozel', 'Bernard'],
+  'GB': ['Guinness', 'Newcastle Brown Ale', 'Fuller\'s London Pride', 'Boddingtons', 'Bass'],
+  'US': ['Budweiser', 'Coors', 'Miller', 'Sierra Nevada', 'Sam Adams', 'Lagunitas'],
+  'ES': ['Estrella Damm', 'Mahou', 'Alhambra', 'Cruzcampo', 'San Miguel'],
+  'FR': ['Kronenbourg 1664', 'Heineken France', 'Desperados', 'Pelforth', 'Leffe'],
+  'IT': ['Peroni', 'Moretti', 'Nastro Azzurro', 'Ichnusa', 'Menabrea'],
+  'NL': ['Heineken', 'Amstel', 'Grolsch', 'Hertog Jan', 'Bavaria'],
+  'PL': ['Żywiec', 'Tyskie', 'Lech', 'Okocim', 'Warka'],
+  'SE': ['Norrlands Guld', 'Mariestads', 'Falcon', 'Spendrups', 'Pripps Blå'],
+  'DK': ['Carlsberg', 'Tuborg', 'Royal Unibrew', 'Faxe', 'Albani'],
+  'default': ['Local Beer', 'Craft Beer', 'Regional Special', 'Popular Brand']
+}
+
 // Top beers by country (sample data - would come from API)
 const TOP_BEERS_BY_COUNTRY = {
   'DE': [
@@ -167,12 +184,23 @@ const FunBeerRating = () => {
   }
 
   const handleSubmit = () => {
-    if (rating === 0) return
+    // MANDATORY validation
+    if (rating === 0) {
+      // Fun alert for missing rating
+      alert('⭐ Please tap the stars to rate!')
+      return
+    }
+    
+    if (!beerName.trim()) {
+      // Fun alert for missing beer name
+      alert('🍺 Please enter the beer name to identify top beers!')
+      return
+    }
     
     setIsSubmitting(true)
     
-    // Simple validation
-    const beerToRate = beerName.trim() || 'My Favorite Beer'
+    // Beer name is now mandatory
+    const beerToRate = beerName.trim()
     
     // Save rating locally
     const ratingData = {
@@ -313,7 +341,7 @@ const FunBeerRating = () => {
         </div>
       </motion.div>
 
-      {/* Simple Beer Input */}
+      {/* Simple Beer Input - MANDATORY */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -322,20 +350,50 @@ const FunBeerRating = () => {
       >
         <div className="text-center mb-4">
           <label className="text-gray-300 text-lg">
-            Which beer are you rating?
+            Which beer are you rating? *
           </label>
         </div>
         <input
           type="text"
           value={beerName}
           onChange={(e) => setBeerName(e.target.value)}
-          placeholder="Beer name (optional)"
-          className="input-beer w-full text-center text-xl py-4"
+          placeholder="Enter beer brand/name"
+          className={`input-beer w-full text-center text-xl py-4 ${
+            beerName.trim() ? 'border-beer-amber' : 'border-red-500/50'
+          }`}
           maxLength={30}
+          required
         />
-        <div className="text-center mt-2 text-gray-400 text-sm">
-          Leave blank for "My Favorite Beer"
+        <div className="text-center mt-2 text-sm">
+          {beerName.trim() ? (
+            <span className="text-green-400">✓ Got it!</span>
+          ) : (
+            <span className="text-red-400">Required to identify top beers</span>
+          )}
         </div>
+        
+        {/* Popular beer suggestions */}
+        {selectedCountry && (
+          <div className="mt-4">
+            <div className="text-center text-gray-400 text-sm mb-2">
+              Popular in {selectedCountry.name}:
+            </div>
+            <div className="flex flex-wrap justify-center gap-2">
+              {(POPULAR_BEER_SUGGESTIONS[selectedCountry.code] || POPULAR_BEER_SUGGESTIONS.default)
+                .slice(0, 4)
+                .map(beer => (
+                <button
+                  key={beer}
+                  type="button"
+                  onClick={() => setBeerName(beer)}
+                  className="px-3 py-1.5 bg-beer-dark/50 text-gray-300 rounded-lg text-sm hover:bg-beer-dark transition-colors"
+                >
+                  {beer}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </motion.div>
 
       {/* Star Rating - Fun & Big */}
@@ -394,12 +452,12 @@ const FunBeerRating = () => {
         className="text-center"
       >
         <motion.button
-          whileHover={{ scale: rating > 0 ? 1.05 : 1 }}
-          whileTap={{ scale: rating > 0 ? 0.95 : 1 }}
+          whileHover={{ scale: (rating > 0 && beerName.trim()) ? 1.05 : 1 }}
+          whileTap={{ scale: (rating > 0 && beerName.trim()) ? 0.95 : 1 }}
           onClick={handleSubmit}
-          disabled={rating === 0 || isSubmitting}
+          disabled={rating === 0 || !beerName.trim() || isSubmitting}
           className={`text-2xl font-bold py-4 px-8 rounded-2xl transition-all ${
-            rating > 0
+            (rating > 0 && beerName.trim())
               ? 'bg-gradient-to-r from-beer-amber to-beer-yellow text-beer-dark hover:shadow-2xl hover:shadow-beer-yellow/30'
               : 'bg-gray-700 text-gray-400 cursor-not-allowed'
           }`}
@@ -409,13 +467,13 @@ const FunBeerRating = () => {
               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-beer-dark"></div>
               Submitting...
             </span>
-          ) : rating > 0 ? (
+          ) : (rating > 0 && beerName.trim()) ? (
             <span className="flex items-center gap-2">
               <FaStar />
               Submit Rating!
             </span>
           ) : (
-            <span>Select stars to rate</span>
+            <span>Rate & enter beer name</span>
           )}
         </motion.button>
         
