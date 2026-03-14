@@ -1,199 +1,150 @@
 import { motion } from 'framer-motion'
-import { FaSearch, FaStar, FaBeer, FaArrowRight, FaCar, FaShieldAlt } from 'react-icons/fa'
-import BeerCard from '../components/BeerCard'
+import { FaSearch, FaStar, FaBeer, FaCar, FaArrowRight } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 
 const HomePage = () => {
-  // Mock data for featured beers
-  const featuredBeers = [
+  const mainActions = [
     {
       id: 1,
-      name: 'Hoppy IPA',
-      brewery: 'Craft Brew Co.',
-      style: 'IPA',
-      abv: '6.5%',
-      ibu: '65',
-      rating: 4.5,
-      description: 'A bold IPA with citrus and pine notes',
-      image: 'https://images.unsplash.com/photo-1629734711235-0f8c5d2b5c1f?w=400'
+      icon: <FaSearch className="text-3xl" />,
+      title: 'Find Beer',
+      description: 'Discover beers by style, ABV, or ingredients',
+      path: '/finder',
+      color: 'from-beer-amber to-beer-yellow',
+      buttonText: 'Start Searching',
+      delay: 0.1
     },
     {
       id: 2,
-      name: 'Amber Ale',
-      brewery: 'Traditional Brews',
-      style: 'Amber Ale',
-      abv: '5.2%',
-      ibu: '25',
-      rating: 4.2,
-      description: 'Smooth and malty with caramel notes',
-      image: 'https://images.unsplash.com/photo-1571613316887-6f8d5cbf7ef7?w-400'
+      icon: <FaStar className="text-3xl" />,
+      title: 'Rate Beer',
+      description: 'Rate and review your favorite beers',
+      path: '/rate/1',
+      color: 'from-brewery-gold to-beer-amber',
+      buttonText: 'Rate Now',
+      delay: 0.2
     },
     {
       id: 3,
-      name: 'Stout Reserve',
-      brewery: 'Dark Horse Brewery',
-      style: 'Stout',
-      abv: '8.0%',
-      ibu: '45',
-      rating: 4.8,
-      description: 'Rich chocolate and coffee flavors',
-      image: 'https://images.unsplash.com/photo-1541692641319-981cc79ee10a?w=400'
-    },
-  ]
-  
-  const features = [
-    {
-      icon: <FaSearch />,
-      title: 'Discover',
-      description: 'Find new beers based on your taste preferences',
-      path: '/finder'
-    },
-    {
-      icon: <FaStar />,
-      title: 'Rate',
-      description: 'Rate beers and share your reviews with the community',
-      path: '/rate/1'
-    },
-    {
-      icon: <FaCar />,
-      title: 'Safety',
-      description: 'Drink n Drive safety calculator and educational tools',
-      path: '/safety'
+      icon: <FaCar className="text-3xl" />,
+      title: 'Safety Check',
+      description: 'Drink responsibly with our safety tools',
+      path: '/safety',
+      color: 'from-red-600 to-orange-500',
+      buttonText: 'Check Safety',
+      delay: 0.3
     }
   ]
   
   return (
-    <div className="space-y-16">
-      {/* Hero Section */}
-      <motion.section 
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="text-center py-12"
-      >
-        <h1 className="text-5xl md:text-7xl font-display font-bold mb-6">
-          <span className="text-gradient">Discover Your Next</span>
-          <br />
-          <span className="text-beer-yellow">Favorite Beer</span>
-        </h1>
-        <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-10">
-          Explore thousands of beers, rate your favorites, and get personalized recommendations 
-          from the world's largest beer community.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link to="/finder">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="btn-primary flex items-center justify-center gap-2"
-            >
-              <FaSearch />
-              <span>Explore Beers</span>
-              <FaArrowRight />
-            </motion.button>
-          </Link>
-          <Link to="/rate/1">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="btn-secondary flex items-center justify-center gap-2"
-            >
-              <FaStar />
-              <span>Rate Beers</span>
-            </motion.button>
-          </Link>
-          <Link to="/safety">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="btn-secondary flex items-center justify-center gap-2 bg-red-900/30 hover:bg-red-900/50 border-red-700/50"
-            >
-              <FaShieldAlt />
-              <span>Safety Tool</span>
-            </motion.button>
-          </Link>
-        </div>
-      </motion.section>
-      
-      {/* Features Section */}
-      <motion.section 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
-        className="py-12"
-      >
-        <h2 className="text-3xl font-display font-bold text-center mb-12 text-beer-yellow">
-          Why BeerApp?
-        </h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
-            <Link key={index} to={feature.path}>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 * index }}
-                className="card-beer text-center p-8 hover:bg-beer-dark/50 transition-all duration-300 cursor-pointer"
-              >
-                <div className="text-4xl text-beer-yellow mb-4">
-                  {feature.icon}
-                </div>
-                <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-                <p className="text-gray-300">{feature.description}</p>
-              </motion.div>
-            </Link>
-          ))}
-        </div>
-      </motion.section>
-      
-      {/* Featured Beers Section */}
-      <motion.section 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
-        className="py-12"
-      >
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-display font-bold text-beer-yellow">
-            Featured Beers
-          </h2>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="btn-secondary flex items-center gap-2"
+    <div className="min-h-screen flex flex-col">
+      {/* Main Content - Centered and Compact */}
+      <div className="flex-1 flex items-center justify-center px-4 py-8">
+        <div className="w-full max-w-2xl mx-auto">
+          {/* App Logo/Header */}
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-12"
           >
-            <span>View All</span>
-            <FaArrowRight />
-          </motion.button>
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <FaBeer className="text-4xl text-beer-yellow animate-bubble" />
+              <h1 className="text-4xl font-display font-bold text-beer-yellow">
+                BeerApp
+              </h1>
+            </div>
+            <p className="text-gray-300 text-lg">
+              Your companion for beer discovery and responsible enjoyment
+            </p>
+          </motion.div>
+          
+          {/* Three Main Action Buttons */}
+          <div className="space-y-6 mb-12">
+            {mainActions.map((action) => (
+              <motion.div
+                key={action.id}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: action.delay }}
+              >
+                <Link to={action.path}>
+                  <div className="group relative overflow-hidden rounded-2xl bg-beer-dark/50 border border-beer-amber/20 p-6 hover:bg-beer-dark/70 transition-all duration-300 cursor-pointer">
+                    <div className="flex items-center gap-4">
+                      {/* Icon with gradient background */}
+                      <div className={`flex-shrink-0 w-16 h-16 rounded-xl bg-gradient-to-br ${action.color} flex items-center justify-center text-white`}>
+                        {action.icon}
+                      </div>
+                      
+                      {/* Content */}
+                      <div className="flex-1">
+                        <h3 className="text-xl font-semibold text-white mb-1">
+                          {action.title}
+                        </h3>
+                        <p className="text-gray-300 text-sm">
+                          {action.description}
+                        </p>
+                      </div>
+                      
+                      {/* Arrow indicator */}
+                      <div className="text-beer-amber opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <FaArrowRight className="text-xl" />
+                      </div>
+                    </div>
+                    
+                    {/* Hover effect line */}
+                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-beer-amber to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+          
+          {/* Quick Stats/Info Bar */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="bg-beer-brown/20 rounded-xl p-6 mb-8"
+          >
+            <div className="grid grid-cols-3 gap-4 text-center">
+              <div>
+                <div className="text-2xl font-bold text-beer-yellow">500+</div>
+                <div className="text-sm text-gray-300">Beers</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-beer-yellow">4.5★</div>
+                <div className="text-sm text-gray-300">Avg Rating</div>
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-beer-yellow">100%</div>
+                <div className="text-sm text-gray-300">Safe Drinking</div>
+              </div>
+            </div>
+          </motion.div>
+          
+          {/* Safety Reminder */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="text-center"
+          >
+            <p className="text-sm text-gray-400">
+              <span className="text-red-400 font-semibold">⚠️ IMPORTANT:</span> Always drink responsibly. 
+              Never drink and drive.
+            </p>
+          </motion.div>
         </div>
-        
-        <div className="grid md:grid-cols-3 gap-8">
-          {featuredBeers.map((beer) => (
-            <BeerCard key={beer.id} beer={beer} />
-          ))}
-        </div>
-      </motion.section>
+      </div>
       
-      {/* CTA Section */}
-      <motion.section 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.7 }}
-        className="text-center py-16 card-beer"
-      >
-        <h2 className="text-4xl font-display font-bold mb-6">
-          Ready to <span className="text-gradient">Explore</span>?
-        </h2>
-        <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-10">
-          Join thousands of beer enthusiasts discovering, rating, and sharing their beer experiences.
-        </p>
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="btn-primary text-lg px-8 py-4"
-        >
-          Get Started Free
-        </motion.button>
-      </motion.section>
+      {/* Minimal Footer */}
+      <footer className="py-6 border-t border-beer-amber/10">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-gray-500 text-sm">
+            © 2026 BeerApp • Drink Responsibly • Data from <a href="https://punkapi.com/" className="text-beer-amber hover:text-beer-yellow">Punk API</a>
+          </p>
+        </div>
+      </footer>
     </div>
   )
 }

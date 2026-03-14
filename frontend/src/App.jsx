@@ -31,63 +31,12 @@ function App() {
         </Routes>
       </main>
       
-      <footer className="mt-16 py-8 border-t border-beer-amber/20">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
-            <div>
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex items-center gap-2 mb-4"
-              >
-                <FaBeer className="text-2xl text-beer-yellow animate-bubble" />
-                <span className="text-xl font-display font-bold text-gradient">BeerApp</span>
-              </motion.div>
-              <p className="text-gray-400 text-sm">
-                Discover, rate, and enjoy beer responsibly.
-              </p>
-            </div>
-            
-            <div>
-              <h4 className="text-lg font-semibold mb-4 text-gray-300">
-                Features
-              </h4>
-              <ul className="space-y-2 text-gray-400 text-sm">
-                <li className="flex items-center gap-2">
-                  <FaSearch className="text-beer-amber" />
-                  <span>Beer Finder with advanced filters</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <FaStar className="text-beer-amber" />
-                  <span>Detailed rating system</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <FaCar className="text-beer-amber" />
-                  <span>Drink n Drive safety tools</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <FaShieldAlt className="text-beer-amber" />
-                  <span>Fake vote protection</span>
-                </li>
-              </ul>
-            </div>
-            
-            <div>
-              <h4 className="text-lg font-semibold mb-4 text-gray-300">
-                Safety First
-              </h4>
-              <p className="text-gray-400 text-sm">
-                <strong className="text-red-400">⚠️ IMPORTANT:</strong> Never drink and drive. 
-                Always use designated drivers or alternative transportation.
-                This app is for educational purposes only.
-              </p>
-            </div>
-          </div>
-          
-          <div className="pt-8 border-t border-beer-amber/10 text-center text-gray-500 text-sm">
-            <p>© 2026 BeerApp. All rights reserved. Drink responsibly.</p>
-            <p className="mt-2">Data provided by <a href="https://punkapi.com/" className="text-beer-amber hover:text-beer-yellow">Punk API</a></p>
-          </div>
+      {/* Simple footer for other pages */}
+      <footer className="py-6 border-t border-beer-amber/10">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-gray-500 text-sm">
+            © 2026 BeerApp • Drink Responsibly • Data from <a href="https://punkapi.com/" className="text-beer-amber hover:text-beer-yellow">Punk API</a>
+          </p>
         </div>
       </footer>
     </div>
