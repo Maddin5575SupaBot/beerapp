@@ -199,23 +199,6 @@ const BeerDetailPage = () => {
     )
   }
   
-  const renderStars = (rating) => {
-    const stars = []
-    for (let i = 0; i < 5; i++) {
-      stars.push(
-        <FaStar
-          key={i}
-          className={`text-2xl ${
-            i < Math.floor(rating)
-              ? 'text-beer-yellow fill-current'
-              : 'text-gray-600'
-          }`}
-        />
-      )
-    }
-    return stars
-  }
-  
   if (error || !beer) {
     return (
       <div className="text-center py-12">
@@ -235,12 +218,13 @@ const BeerDetailPage = () => {
   
   const renderStars = (rating) => {
     const stars = []
+    const safeRating = rating || 0 // Handle undefined/null ratings
     for (let i = 0; i < 5; i++) {
       stars.push(
         <FaStar
           key={i}
           className={`text-2xl ${
-            i < Math.floor(rating)
+            i < Math.floor(safeRating)
               ? 'text-beer-yellow fill-current'
               : 'text-gray-600'
           }`}
@@ -316,7 +300,7 @@ const BeerDetailPage = () => {
             <div className="flex items-center gap-2">
               {renderStars(beer.rating)}
               <span className="text-2xl font-bold text-gray-100 ml-2">
-                {beer.rating.toFixed(1)}
+                {(beer.rating || 0).toFixed(1)}
               </span>
             </div>
             <span className="text-gray-400">
