@@ -11,30 +11,30 @@ const HomePage = () => {
       id: 1,
       icon: <FaSearch className="text-3xl" />,
       title: t('beerFinder'),
-      description: 'Discover beers by style, ABV, or ingredients',
+      description: t('discoverBeers'),
       path: '/finder',
       color: 'from-beer-amber to-beer-yellow',
-      buttonText: 'Start Searching',
+      buttonText: t('startSearching'),
       delay: 0.1
     },
     {
       id: 2,
       icon: <FaStar className="text-3xl" />,
       title: t('rateBeer'),
-      description: 'Quick & fun rating - see top beers in your country',
+      description: t('quickFunRating'),
       path: '/rate',
       color: 'from-brewery-gold to-beer-amber',
-      buttonText: 'Rate Now',
+      buttonText: t('rateNow'),
       delay: 0.2
     },
     {
       id: 3,
       icon: <FaCar className="text-3xl" />,
       title: t('safety'),
-      description: 'Drink responsibly with our safety tools',
+      description: t('safetyTools'),
       path: '/safety',
       color: 'from-red-600 to-orange-500',
-      buttonText: 'Check Safety',
+      buttonText: t('checkSafety'),
       delay: 0.3
     }
   ]
@@ -57,7 +57,7 @@ const HomePage = () => {
               </h1>
             </div>
             <p className="text-gray-300 text-lg">
-              Your companion for beer discovery and responsible enjoyment
+              {t('appTagline')}
             </p>
           </motion.div>
           
@@ -112,15 +112,15 @@ const HomePage = () => {
             <div className="grid grid-cols-3 gap-4 text-center">
               <div>
                 <div className="text-2xl font-bold text-beer-yellow">500+</div>
-                <div className="text-sm text-gray-300">Beers</div>
+                <div className="text-sm text-gray-300">{t('beersStat')}</div>
               </div>
               <div>
                 <div className="text-2xl font-bold text-beer-yellow">4.5★</div>
-                <div className="text-sm text-gray-300">Avg Rating</div>
+                <div className="text-sm text-gray-300">{t('avgRating')}</div>
               </div>
               <div>
                 <div className="text-2xl font-bold text-beer-yellow">100%</div>
-                <div className="text-sm text-gray-300">Safe Drinking</div>
+                <div className="text-sm text-gray-300">{t('safeDrinking')}</div>
               </div>
             </div>
           </motion.div>

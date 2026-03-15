@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { FaSearch, FaFilter, FaBeer, FaRandom, FaFire, FaSnowflake } from 'react-icons/fa'
+import { useLanguage } from '../contexts/LanguageContext'
 import beerService from '../services/beerService'
 import BeerCard from './BeerCard'
 
 const BeerFinder = () => {
+  const { t } = useLanguage()
   const [searchQuery, setSearchQuery] = useState('')
   const [beers, setBeers] = useState([])
   const [loading, setLoading] = useState(true)
@@ -173,10 +175,10 @@ const BeerFinder = () => {
   }
 
   const getQuickFilters = () => [
-    { label: 'Light Beers', icon: <FaSnowflake />, filter: { minABV: 0, maxABV: 4.5 } },
-    { label: 'Strong Beers', icon: <FaFire />, filter: { minABV: 7, maxABV: 15 } },
-    { label: 'Hoppy IPAs', icon: <FaBeer />, filter: { style: 'IPA', minIBU: 50 } },
-    { label: 'Session Beers', icon: <FaBeer />, filter: { minABV: 3, maxABV: 5 } }
+    { label: t('lightBeers'), icon: <FaSnowflake />, filter: { minABV: 0, maxABV: 4.5 } },
+    { label: t('strongBeers'), icon: <FaFire />, filter: { minABV: 7, maxABV: 15 } },
+    { label: t('hoppyIPAs'), icon: <FaBeer />, filter: { style: 'IPA', minIBU: 50 } },
+    { label: t('sessionBeers'), icon: <FaBeer />, filter: { minABV: 3, maxABV: 5 } }
   ]
 
   const applyQuickFilter = (filter) => {
@@ -197,7 +199,7 @@ const BeerFinder = () => {
             <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <input
               type="text"
-              placeholder="Search for beers by name, style, or brewery..."
+              placeholder={t('search') + " " + t('beer') + " " + t('byNameStyleBrewery')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
@@ -212,7 +214,7 @@ const BeerFinder = () => {
               className="btn-primary flex items-center gap-2"
             >
               <FaSearch />
-              <span>Search</span>
+              <span>{t('search')}</span>
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -221,14 +223,14 @@ const BeerFinder = () => {
               className="btn-secondary flex items-center gap-2"
             >
               <FaRandom />
-              <span>Random</span>
+              <span>{t('random')}</span>
             </motion.button>
           </div>
         </div>
 
         {/* Quick Filters */}
         <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-3 text-beer-yellow">Quick Filters</h3>
+          <h3 className="text-lg font-semibold mb-3 text-beer-yellow">{t('quickFilters')}</h3>
           <div className="flex flex-wrap gap-2">
             {getQuickFilters().map((quickFilter, index) => (
               <motion.button
@@ -248,7 +250,7 @@ const BeerFinder = () => {
         {/* Advanced Filters - Based on Martin's requirements */}
         <div className="grid md:grid-cols-5 gap-4">
           <div>
-            <label className="block text-sm text-gray-400 mb-2">Brewing Style</label>
+            <label className="block text-sm text-gray-400 mb-2">{t('brewingStyle')}</label>
             <select
               value={filters.style}
               onChange={(e) => handleFilterChange('style', e.target.value)}
@@ -263,7 +265,7 @@ const BeerFinder = () => {
           </div>
           
           <div>
-            <label className="block text-sm text-gray-400 mb-2">Alcohol Level (ABV)</label>
+            <label className="block text-sm text-gray-400 mb-2">{t('alcoholLevel')} ({t('abv')})</label>
             <div className="flex items-center gap-2">
               <input
                 type="number"
@@ -273,7 +275,7 @@ const BeerFinder = () => {
                 value={filters.minABV}
                 onChange={(e) => handleFilterChange('minABV', parseFloat(e.target.value))}
                 className="input-beer w-20"
-                placeholder="Min"
+                placeholder={t('min')}
               />
               <span className="text-gray-400">-</span>
               <input
@@ -284,13 +286,13 @@ const BeerFinder = () => {
                 value={filters.maxABV}
                 onChange={(e) => handleFilterChange('maxABV', parseFloat(e.target.value))}
                 className="input-beer w-20"
-                placeholder="Max"
+                placeholder={t('max')}
               />
             </div>
           </div>
           
           <div>
-            <label className="block text-sm text-gray-400 mb-2">Bitterness (IBU)</label>
+            <label className="block text-sm text-gray-400 mb-2">{t('bitterness')} ({t('ibu')})</label>
             <div className="flex items-center gap-2">
               <input
                 type="number"
@@ -300,7 +302,7 @@ const BeerFinder = () => {
                 value={filters.minIBU}
                 onChange={(e) => handleFilterChange('minIBU', parseInt(e.target.value))}
                 className="input-beer w-20"
-                placeholder="Min"
+                placeholder={t('min')}
               />
               <span className="text-gray-400">-</span>
               <input
@@ -311,39 +313,39 @@ const BeerFinder = () => {
                 value={filters.maxIBU}
                 onChange={(e) => handleFilterChange('maxIBU', parseInt(e.target.value))}
                 className="input-beer w-20"
-                placeholder="Max"
+                placeholder={t('max')}
               />
             </div>
           </div>
           
           <div>
-            <label className="block text-sm text-gray-400 mb-2">Color</label>
+            <label className="block text-sm text-gray-400 mb-2">{t('color')}</label>
             <select
               value={filters.color}
               onChange={(e) => handleFilterChange('color', e.target.value)}
               className="input-beer w-full"
             >
-              <option value="all">All Colors</option>
-              <option value="pale">Pale/Yellow</option>
-              <option value="amber">Amber/Copper</option>
-              <option value="brown">Brown/Dark</option>
-              <option value="black">Black/Stout</option>
+              <option value="all">{t('allColors')}</option>
+              <option value="pale">{t('paleYellow')}</option>
+              <option value="amber">{t('amberCopper')}</option>
+              <option value="brown">{t('brownDark')}</option>
+              <option value="black">{t('blackStout')}</option>
             </select>
           </div>
           
           <div>
-            <label className="block text-sm text-gray-400 mb-2">Taste Profile</label>
+            <label className="block text-sm text-gray-400 mb-2">{t('tasteProfile')}</label>
             <select
               value={filters.taste}
               onChange={(e) => handleFilterChange('taste', e.target.value)}
               className="input-beer w-full"
             >
-              <option value="all">All Tastes</option>
-              <option value="hoppy">Hoppy/Bitter</option>
-              <option value="malty">Malty/Sweet</option>
-              <option value="fruity">Fruity/Citrus</option>
-              <option value="roasty">Roasty/Chocolate</option>
-              <option value="sour">Sour/Tart</option>
+              <option value="all">{t('allTastes')}</option>
+              <option value="hoppy">{t('hoppyBitter')}</option>
+              <option value="malty">{t('maltySweet')}</option>
+              <option value="fruity">{t('fruityCitrus')}</option>
+              <option value="roasty">{t('roastyChocolate')}</option>
+              <option value="sour">{t('sourTart')}</option>
             </select>
           </div>
         </div>
@@ -356,7 +358,7 @@ const BeerFinder = () => {
             className="btn-primary w-full flex items-center justify-center gap-2"
           >
             <FaFilter />
-            <span>Apply Filters</span>
+            <span>{t('applyFilters')}</span>
           </motion.button>
         </div>
       </motion.div>
@@ -365,11 +367,11 @@ const BeerFinder = () => {
       <div>
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-display font-bold text-beer-yellow">
-            Found {beers.length} Beers
+            {t('found')} {beers.length} {t('beers')}
           </h2>
           {loading && (
             <div className="text-beer-yellow animate-pulse">
-              Loading...
+              {t('loading')}
             </div>
           )}
         </div>
@@ -413,10 +415,10 @@ const BeerFinder = () => {
           <div className="text-center py-16 card-beer">
             <FaSearch className="text-6xl text-gray-600 mx-auto mb-6" />
             <h3 className="text-2xl font-semibold mb-4 text-gray-300">
-              No beers found
+              {t('noBeersFound')}
             </h3>
             <p className="text-gray-400 mb-6">
-              Try adjusting your search or filters
+              {t('tryDifferentFilters')}
             </p>
             <button
               onClick={() => {
@@ -435,7 +437,7 @@ const BeerFinder = () => {
               }}
               className="btn-primary"
             >
-              Clear All
+              {t('clearAll')}
             </button>
           </div>
         )}
