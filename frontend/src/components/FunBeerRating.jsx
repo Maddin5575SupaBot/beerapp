@@ -363,19 +363,53 @@ const FunBeerRating = () => {
         </p>
       </motion.div>
 
-      {/* Country Badge */}
+      {/* Country Selection - Interactive */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.1 }}
-        className="flex items-center justify-center gap-3 mb-8"
+        className="mb-8"
       >
-        <div className="flex items-center gap-2 px-4 py-2 bg-beer-dark/50 rounded-full">
-          <FaMapMarkerAlt className="text-beer-amber" />
-          <span className="text-2xl">{selectedCountry?.flag || '🌍'}</span>
-          <span className="text-gray-300 font-semibold">
-            {selectedCountry?.name || 'Detecting...'}
-          </span>
+        <div className="text-center mb-4">
+          <label className="text-gray-300 text-lg">
+            Select Country for Beer Selection
+          </label>
+          <p className="text-gray-400 text-sm mt-1">
+            Best experience with Germany (DE) or Austria (AT)
+          </p>
+        </div>
+        
+        <div className="flex flex-wrap justify-center gap-2">
+          {COUNTRIES.map(country => (
+            <motion.button
+              key={country.code}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setSelectedCountry(country)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
+                selectedCountry?.code === country.code
+                  ? 'bg-beer-amber text-beer-dark font-semibold'
+                  : 'bg-beer-dark/50 text-gray-300 hover:bg-beer-dark'
+              }`}
+            >
+              <span className="text-xl">{country.flag}</span>
+              <span>{country.name}</span>
+              {(country.code === 'DE' || country.code === 'AT') && (
+                <span className="text-xs bg-beer-yellow/20 text-beer-yellow px-2 py-0.5 rounded-full">
+                  Recommended
+                </span>
+              )}
+            </motion.button>
+          ))}
+        </div>
+        
+        <div className="text-center mt-4 text-sm text-gray-400">
+          <FaMapMarkerAlt className="inline mr-1" />
+          {selectedCountry ? (
+            <span>Currently selected: <span className="text-beer-yellow">{selectedCountry.name}</span></span>
+          ) : (
+            <span>Select a country to see available beers</span>
+          )}
         </div>
       </motion.div>
 

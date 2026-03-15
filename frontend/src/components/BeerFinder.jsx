@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { FaSearch, FaFilter, FaBeer, FaRandom, FaFire, FaSnowflake } from 'react-icons/fa'
+import { FaSearch, FaFilter, FaBeer, FaRandom, FaFire, FaSnowflake, FaGlobe, FaMapMarkerAlt } from 'react-icons/fa'
 import { useLanguage } from '../contexts/LanguageContext'
 import beerService from '../services/beerService'
+import germanAustrianBeerService from '../services/germanAustrianBeerService'
 import BeerCard from './BeerCard'
 
 const BeerFinder = () => {
@@ -10,6 +11,7 @@ const BeerFinder = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [beers, setBeers] = useState([])
   const [loading, setLoading] = useState(true)
+  const [dataSource, setDataSource] = useState('german') // 'german' or 'international'
   const [filters, setFilters] = useState({
     style: 'all',
     minABV: 0,
@@ -18,33 +20,58 @@ const BeerFinder = () => {
     maxIBU: 100,
     color: 'all',
     taste: 'all',
-    sortBy: 'name'
+    sortBy: 'name',
+    country: 'all'
   })
-  const [styles, setStyles] = useState(['All', 'IPA', 'Lager', 'Stout', 'Pale Ale', 'Wheat Beer'])
+  const [styles, setStyles] = useState(['All', 'Pilsner', 'Lager', 'Weizen', 'Export', 'Helles', 'Märzen'])
 
   useEffect(() => {
     loadBeers()
     loadStyles()
-  }, [])
+  }, [dataSource])
 
   const loadBeers = async () => {
     setLoading(true)
     try {
-      const data = await beerService.getBeers(1, 20)
-      setBeers(data)
+      if (dataSource === 'german') {
+        // Use German/Austrian database
+        const data = germanAustrianBeerService.getAllBeers()
+        setBeers(data)
+      } else {
+        // Use international Punk API
+        const data = await beerService.getBeers(1, 20)
+        setBeers(data)
+      }
     } catch (error) {
       console.error('Error loading beers:', error)
+      // Fallback to German database if API fails
+      const data = germanAustrianBeerService.getAllBeers()
+      setBeers(data)
     } finally {
       setLoading(false)
     }
   }
 
-  const loadStyles = async () => {
+  const loadStyles = () => {
     try {
-      const data = await beerService.getBeerStyles()
-      setStyles(data)
+      if (dataSource === 'german') {
+        // Get styles from German/Austrian database
+        const germanStyles = germanAustrianBeerService.getAllStyles()
+        setStyles(['All', ...germanStyles])
+      } else {
+        // Get styles from international API
+        beerService.getBeerStyles().then(data => {
+          setStyles(data)
+        }).catch(() => {
+          // Fallback to German styles
+          const germanStyles = germanAustrianBeerService.getAllStyles()
+          setStyles(['All', ...germanStyles])
+        })
+      }
     } catch (error) {
       console.error('Error loading styles:', error)
+      const germanStyles = germanAustrianBeerService.getAllStyles()
+      setStyles(['All', ...germanStyles])
     }
   }
 
@@ -56,10 +83,20 @@ const BeerFinder = () => {
 
     setLoading(true)
     try {
-      const data = await beerService.searchBeers(searchQuery)
+      let data
+      if (dataSource === 'german') {
+        // Search in German/Austrian database
+        data = germanAustrianBeerService.searchBeers(searchQuery)
+      } else {
+        // Search in international API
+        data = await beerService.searchBeers(searchQuery)
+      }
       setBeers(data)
     } catch (error) {
       console.error('Error searching beers:', error)
+      // Fallback to German database search
+      const data = germanAustrianBeerService.searchBeers(searchQuery)
+      setBeers(data)
     } finally {
       setLoading(false)
     }
@@ -68,10 +105,20 @@ const BeerFinder = () => {
   const handleRandomBeer = async () => {
     setLoading(true)
     try {
-      const randomBeer = await beerService.getRandomBeer()
+      let randomBeer
+      if (dataSource === 'german') {
+        // Get random beer from German/Austrian database
+        randomBeer = germanAustrianBeerService.getRandomBeer()
+      } else {
+        // Get random beer from international API
+        randomBeer = await beerService.getRandomBeer()
+      }
       setBeers([randomBeer])
     } catch (error) {
       console.error('Error getting random beer:', error)
+      // Fallback to German random beer
+      const randomBeer = germanAustrianBeerService.getRandomBeer()
+      setBeers([randomBeer])
     } finally {
       setLoading(false)
     }
@@ -86,69 +133,48 @@ const BeerFinder = () => {
     try {
       let data
       
-      if (filters.minABV > 0 || filters.maxABV < 15) {
-        data = await beerService.getBeersByABV(filters.minABV, filters.maxABV)
-      } else if (filters.minIBU > 0 || filters.maxIBU < 100) {
-        data = await beerService.getBeersByIBU(filters.minIBU, filters.maxIBU)
+      if (dataSource === 'german') {
+        // Get all beers from German/Austrian database
+        data = germanAustrianBeerService.getAllBeers()
       } else {
-        data = await beerService.getBeers(1, 20)
+        // Try to get beers from international API
+        try {
+          if (filters.minABV > 0 || filters.maxABV < 15) {
+            data = await beerService.getBeersByABV(filters.minABV, filters.maxABV)
+          } else if (filters.minIBU > 0 || filters.maxIBU < 100) {
+            data = await beerService.getBeersByIBU(filters.minIBU, filters.maxIBU)
+          } else {
+            data = await beerService.getBeers(1, 20)
+          }
+        } catch (error) {
+          // Fallback to German database if API fails
+          data = germanAustrianBeerService.getAllBeers()
+        }
+      }
+      
+      // Apply ABV filter (works for both data sources)
+      if (filters.minABV > 0 || filters.maxABV < 15) {
+        data = data.filter(beer => {
+          const abv = beer.abv || 0
+          return abv >= filters.minABV && abv <= filters.maxABV
+        })
+      }
+      
+      // Apply IBU filter (works for both data sources)
+      if (filters.minIBU > 0 || filters.maxIBU < 100) {
+        data = data.filter(beer => {
+          const ibu = beer.ibu || 0
+          return ibu >= filters.minIBU && ibu <= filters.maxIBU
+        })
       }
       
       // Apply style filter
       if (filters.style !== 'all') {
-        data = data.filter(beer => 
-          beer.tagline?.toLowerCase().includes(filters.style.toLowerCase()) ||
-          beer.description?.toLowerCase().includes(filters.style.toLowerCase())
-        )
-      }
-      
-      // Apply color filter (based on beer characteristics)
-      if (filters.color !== 'all') {
         data = data.filter(beer => {
-          const abv = beer.abv || 0
-          const description = (beer.description || '').toLowerCase()
-          const tagline = (beer.tagline || '').toLowerCase()
-          
-          switch (filters.color) {
-            case 'pale':
-              return abv < 5.5 || description.includes('pale') || tagline.includes('pale')
-            case 'amber':
-              return (abv >= 5.5 && abv < 7) || description.includes('amber') || tagline.includes('amber')
-            case 'brown':
-              return description.includes('brown') || tagline.includes('brown') || description.includes('porter')
-            case 'black':
-              return description.includes('stout') || tagline.includes('stout') || description.includes('black')
-            default:
-              return true
-          }
-        })
-      }
-      
-      // Apply taste filter
-      if (filters.taste !== 'all') {
-        data = data.filter(beer => {
-          const description = (beer.description || '').toLowerCase()
-          const tagline = (beer.tagline || '').toLowerCase()
-          
-          switch (filters.taste) {
-            case 'hoppy':
-              return description.includes('hoppy') || description.includes('bitter') || 
-                     tagline.includes('ipa') || (beer.ibu || 0) > 40
-            case 'malty':
-              return description.includes('malty') || description.includes('sweet') ||
-                     description.includes('caramel') || description.includes('toffee')
-            case 'fruity':
-              return description.includes('fruit') || description.includes('citrus') ||
-                     description.includes('berry') || tagline.includes('fruit')
-            case 'roasty':
-              return description.includes('roast') || description.includes('chocolate') ||
-                     description.includes('coffee') || description.includes('dark')
-            case 'sour':
-              return description.includes('sour') || description.includes('tart') ||
-                     tagline.includes('sour') || description.includes('acid')
-            default:
-              return true
-          }
+          const beerStyle = beer.style || beer.tagline || ''
+          const description = beer.description || ''
+          return beerStyle.toLowerCase().includes(filters.style.toLowerCase()) ||
+                 description.toLowerCase().includes(filters.style.toLowerCase())
         })
       }
       
@@ -156,11 +182,11 @@ const BeerFinder = () => {
       data.sort((a, b) => {
         switch (filters.sortBy) {
           case 'abv':
-            return b.abv - a.abv
+            return (b.abv || 0) - (a.abv || 0)
           case 'ibu':
-            return b.ibu - a.ibu
+            return (b.ibu || 0) - (a.ibu || 0)
           case 'name':
-            return a.name.localeCompare(b.name)
+            return (a.name || '').localeCompare(b.name || '')
           default:
             return 0
         }
@@ -169,17 +195,34 @@ const BeerFinder = () => {
       setBeers(data)
     } catch (error) {
       console.error('Error applying filters:', error)
+      // Fallback to German database
+      const data = germanAustrianBeerService.getAllBeers()
+      setBeers(data)
     } finally {
       setLoading(false)
     }
   }
 
-  const getQuickFilters = () => [
-    { label: t('lightBeers'), icon: <FaSnowflake />, filter: { minABV: 0, maxABV: 4.5 } },
-    { label: t('strongBeers'), icon: <FaFire />, filter: { minABV: 7, maxABV: 15 } },
-    { label: t('hoppyIPAs'), icon: <FaBeer />, filter: { style: 'IPA', minIBU: 50 } },
-    { label: t('sessionBeers'), icon: <FaBeer />, filter: { minABV: 3, maxABV: 5 } }
-  ]
+  const getQuickFilters = () => {
+    const filters = [
+      { label: t('lightBeers'), icon: <FaSnowflake />, filter: { minABV: 0, maxABV: 4.5 } },
+      { label: t('strongBeers'), icon: <FaFire />, filter: { minABV: 7, maxABV: 15 } },
+      { label: t('sessionBeers'), icon: <FaBeer />, filter: { minABV: 3, maxABV: 5 } }
+    ]
+    
+    // Only show IPA filter for international database
+    if (dataSource === 'international') {
+      filters.push({ label: t('hoppyIPAs'), icon: <FaBeer />, filter: { style: 'IPA', minIBU: 50 } })
+    } else {
+      // German-specific quick filters
+      filters.push(
+        { label: 'German Pilsner', icon: <FaBeer />, filter: { style: 'Pilsner' } },
+        { label: 'Wheat Beers', icon: <FaBeer />, filter: { style: 'Weizen' } }
+      )
+    }
+    
+    return filters
+  }
 
   const applyQuickFilter = (filter) => {
     setFilters(prev => ({ ...prev, ...filter }))
@@ -188,6 +231,99 @@ const BeerFinder = () => {
 
   return (
     <div className="space-y-8">
+      {/* Data Source Selector */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="card-beer p-6"
+      >
+        <div className="text-center mb-4">
+          <h3 className="text-xl font-semibold text-beer-yellow mb-2">
+            <FaGlobe className="inline mr-2" />
+            Select Beer Database
+          </h3>
+          <p className="text-gray-400 text-sm">
+            Choose between German/Austrian beers or international craft beers
+          </p>
+        </div>
+        
+        <div className="flex flex-col md:flex-row gap-4">
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => {
+              setDataSource('german')
+              setTimeout(() => loadBeers(), 100)
+            }}
+            className={`flex-1 p-6 rounded-xl border-2 transition-all ${
+              dataSource === 'german'
+                ? 'border-beer-amber bg-beer-amber/10'
+                : 'border-gray-700 bg-beer-dark/30 hover:border-beer-amber/50'
+            }`}
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <div className={`p-3 rounded-lg ${
+                dataSource === 'german' ? 'bg-beer-amber/20' : 'bg-gray-700'
+              }`}>
+                <FaMapMarkerAlt className={`text-xl ${
+                  dataSource === 'german' ? 'text-beer-amber' : 'text-gray-400'
+                }`} />
+              </div>
+              <div className="text-left">
+                <h4 className="text-lg font-semibold text-white">German & Austrian Beers</h4>
+                <p className="text-gray-400 text-sm">Focus on DACH region</p>
+              </div>
+            </div>
+            <ul className="text-gray-300 text-sm space-y-1 text-left">
+              <li>• 61 beers from Germany & Austria</li>
+              <li>• Major breweries: Binding, Bitburger, Krombacher</li>
+              <li>• Traditional styles: Pilsner, Weizen, Export</li>
+              <li>• Fast, reliable local database</li>
+            </ul>
+          </motion.button>
+          
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => {
+              setDataSource('international')
+              setTimeout(() => loadBeers(), 100)
+            }}
+            className={`flex-1 p-6 rounded-xl border-2 transition-all ${
+              dataSource === 'international'
+                ? 'border-beer-amber bg-beer-amber/10'
+                : 'border-gray-700 bg-beer-dark/30 hover:border-beer-amber/50'
+            }`}
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <div className={`p-3 rounded-lg ${
+                dataSource === 'international' ? 'bg-beer-amber/20' : 'bg-gray-700'
+              }`}>
+                <FaGlobe className={`text-xl ${
+                  dataSource === 'international' ? 'text-beer-amber' : 'text-gray-400'
+                }`} />
+              </div>
+              <div className="text-left">
+                <h4 className="text-lg font-semibold text-white">International Craft Beers</h4>
+                <p className="text-gray-400 text-sm">Worldwide selection</p>
+              </div>
+            </div>
+            <ul className="text-gray-300 text-sm space-y-1 text-left">
+              <li>• Thousands of craft beers worldwide</li>
+              <li>• Punk API integration</li>
+              <li>• Experimental & creative styles</li>
+              <li>• Requires internet connection</li>
+            </ul>
+          </motion.button>
+        </div>
+        
+        <div className="mt-4 text-center text-sm text-gray-400">
+          Currently using: <span className="text-beer-yellow font-semibold">
+            {dataSource === 'german' ? 'German/Austrian Database' : 'International API'}
+          </span>
+        </div>
+      </motion.div>
+
       {/* Search Section */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
