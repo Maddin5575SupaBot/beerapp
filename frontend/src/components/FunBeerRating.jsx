@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { FaStar, FaTrophy, FaBeer, FaMapMarkerAlt, FaGlobe, FaSmile, FaLaugh, FaHeart, FaFire, FaSearch, FaBuilding, FaChevronDown } from 'react-icons/fa'
 import { useLanguage } from '../contexts/LanguageContext'
-import germanAustrianBeerService from '../services/germanAustrianBeerService'
+import combinedBeerService from '../services/combinedBeerService'
 
 // Simple country detection with flags
 const COUNTRIES = [
@@ -112,12 +112,46 @@ const FunBeerRating = () => {
   // Load breweries when country is selected (focus on DE/AT)
   useEffect(() => {
     if (selectedCountry) {
-      // For Germany and Austria, use our local database
-      if (selectedCountry.code === 'DE' || selectedCountry.code === 'AT') {
-        const countryBreweries = germanAustrianBeerService.getBreweriesByCountry(selectedCountry.code)
+      // Map country code to country name
+      const countryMap = {
+        'US': 'United States',
+        'DE': 'Germany',
+        'ES': 'Spain',
+        'FR': 'France',
+        'PL': 'Poland',
+        'SE': 'Sweden',
+        'DK': 'Denmark',
+        'IT': 'Italy',
+        'NL': 'Netherlands',
+        'CZ': 'Czech Republic',
+        'PT': 'Portugal',
+        'BE': 'Belgium',
+        'GB': 'United Kingdom',
+        'IE': 'Ireland',
+        'AT': 'Austria',
+        'CH': 'Switzerland'
+      }
+      
+      const countryName = countryMap[selectedCountry.code]
+      if (countryName) {
+        // Get beers for this country from combined service
+        const countryBeers = combinedBeerService.getBeersByCountry(selectedCountry.code)
+        
+        // Extract unique breweries from beers
+        const breweryMap = {}
+        countryBeers.forEach(beer => {
+          if (!breweryMap[beer.brewery]) {
+            breweryMap[beer.brewery] = {
+              name: beer.brewery,
+              city: beer.brewery_city,
+              country: beer.brewery_country
+            }
+          }
+        })
+        
+        const countryBreweries = Object.values(breweryMap)
         setBreweries(countryBreweries)
       } else {
-        // For other countries, show message or use alternative
         setBreweries([])
       }
       
@@ -131,8 +165,9 @@ const FunBeerRating = () => {
   // Load beers when brewery is selected
   useEffect(() => {
     if (selectedBrewery) {
-      // Get beers for this brewery from our service
-      const breweryBeers = germanAustrianBeerService.getBeersByBrewery(selectedBrewery.name)
+      // Get beers for this brewery from combined service
+      const allBeers = combinedBeerService.getAllBeers()
+      const breweryBeers = allBeers.filter(beer => beer.brewery === selectedBrewery.name)
       setBeers(breweryBeers)
       setSelectedBeer(null) // Reset beer selection when brewery changes
     }
@@ -490,7 +525,7 @@ const FunBeerRating = () => {
                   </div>
                 ) : (
                   <div className="px-4 py-3 text-gray-400 text-center">
-                    Focus on German & Austrian beers. Switch to DE or AT for best selection.
+                    Select DE or AT for German/Austrian beers, or choose any country for international selection.
                   </div>
                 )}
               </div>
@@ -605,7 +640,7 @@ const FunBeerRating = () => {
               type="button"
               onClick={() => {
                 if (searchQuery.trim()) {
-                  const results = germanAustrianBeerService.searchBeers(searchQuery)
+                  const results = combinedBeerService.searchBeers(searchQuery)
                   if (results.length > 0) {
                     const firstResult = results[0]
                     // Find the brewery for this beer
