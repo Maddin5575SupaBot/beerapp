@@ -1,0 +1,103 @@
+{
+  "beers": [
+    { "id": 1, "name": "Binding Pils", "brewery": "Binding-Brauerei", "brewery_city": "Frankfurt", "brewery_country": "Germany", "style": "Pilsner", "abv": 4.8, "ibu": 32, "description": "Traditional German Pilsner with crisp bitterness.", "category": "German Lager" },
+    { "id": 2, "name": "Binding Export", "brewery": "Binding-Brauerei", "brewery_city": "Frankfurt", "brewery_country": "Germany", "style": "Export", "abv": 5.3, "ibu": 28, "description": "Full-bodied export beer with rich malt character.", "category": "German Lager" },
+    { "id": 3, "name": "Binding Lager", "brewery": "Binding-Brauerei", "brewery_city": "Frankfurt", "brewery_country": "Germany", "style": "Lager", "abv": 4.9, "ibu": 24, "description": "Crisp, golden lager with subtle hop aroma.", "category": "German Lager" },
+    { "id": 4, "name": "Binding Radler", "brewery": "Binding-Brauerei", "brewery_city": "Frankfurt", "brewery_country": "Germany", "style": "Radler", "abv": 2.5, "ibu": 12, "description": "Refreshing beer-lemonade mix.", "category": "Mixed Beer" },
+    { "id": 5, "name": "Binding Weizen", "brewery": "Binding-Brauerei", "brewery_city": "Frankfurt", "brewery_country": "Germany", "style": "Weizen", "abv": 5.4, "ibu": 14, "description": "Traditional wheat beer with banana notes.", "category": "German Wheat Beer" },
+    
+    { "id": 6, "name": "Bitburger Premium Pils", "brewery": "Bitburger", "brewery_city": "Bitburg", "brewery_country": "Germany", "style": "Pilsner", "abv": 4.8, "ibu": 38, "description": "Germany's favorite Pilsner with distinctive hop bitterness.", "category": "German Lager" },
+    { "id": 7, "name": "Bitburger Radler", "brewery": "Bitburger", "brewery_city": "Bitburg", "brewery_country": "Germany", "style": "Radler", "abv": 2.5, "ibu": 12, "description": "Beer with lemonade.", "category": "Mixed Beer" },
+    { "id": 8, "name": "Bitburger Alkoholfrei", "brewery": "Bitburger", "brewery_city": "Bitburg", "brewery_country": "Germany", "style": "Non-alcoholic", "abv": 0.0, "ibu": 8, "description": "Alcohol-free beer with full flavor.", "category": "Non-alcoholic" },
+    
+    { "id": 9, "name": "Krombacher Pils", "brewery": "Krombacher", "brewery_city": "Kreuztal", "brewery_country": "Germany", "style": "Pilsner", "abv": 4.8, "ibu": 30, "description": "Germany's best-selling Pilsner.", "category": "German Lager" },
+    { "id": 10, "name": "Krombacher Weizen", "brewery": "Krombacher", "brewery_city": "Kreuztal", "brewery_country": "Germany", "style": "Weizen", "abv": 5.3, "ibu": 14, "description": "Wheat beer with yeast.", "category": "German Wheat Beer" },
+    
+    { "id": 11, "name": "Warsteiner Premium", "brewery": "Warsteiner", "brewery_city": "Warstein", "brewery_country": "Germany", "style": "Pilsner", "abv": 4.8, "ibu": 29, "description": "Premium German Pilsner.", "category": "German Lager" },
+    { "id": 12, "name": "Warsteiner Fresh", "brewery": "Warsteiner", "brewery_city": "Warstein", "brewery_country": "Germany", "style": "Pilsner", "abv": 2.5, "ibu": 15, "description": "Light beer.", "category": "Light Beer" },
+    
+    { "id": 13, "name": "Beck's Pils", "brewery": "Beck's", "brewery_city": "Bremen", "brewery_country": "Germany", "style": "Pilsner", "abv": 5.0, "ibu": 34, "description": "International premium beer.", "category": "German Lager" },
+    { "id": 14, "name": "Beck's Green Lemon", "brewery": "Beck's", "brewery_city": "Bremen", "brewery_country": "Germany", "style": "Radler", "abv": 2.0, "ibu": 10, "description": "Beer with lemon.", "category": "Mixed Beer" },
+    
+    { "id": 15, "name": "Paulaner Hell", "brewery": "Paulaner", "brewery_city": "Munich", "brewery_country": "Germany", "style": "Helles", "abv": 4.9, "ibu": 22, "description": "Munich-style lager.", "category": "German Lager" },
+    { "id": 16, "name": "Paulaner Weissbier", "brewery": "Paulaner", "brewery_city": "Munich", "brewery_country": "Germany", "style": "Weizen", "abv": 5.5, "ibu": 13, "description": "Original Munich wheat beer.", "category": "German Wheat Beer" },
+    { "id": 17, "name": "Paulaner Oktoberfest", "brewery": "Paulaner", "brewery_city": "Munich", "brewery_country": "Germany", "style": "Märzen", "abv": 6.0, "ibu": 26, "description": "Oktoberfest special beer.", "category": "Festival Beer" },
+    
+    { "id": 18, "name": "Weihenstephaner Hefeweissbier", "brewery": "Weihenstephaner", "brewery_city": "Freising", "brewery_country": "Germany", "style": "Weizen", "abv": 5.4, "ibu": 14, "description": "World's best wheat beer.", "category": "German Wheat Beer" },
+    { "id": 19, "name": "Weihenstephaner Original", "brewery": "Weihenstephaner", "brewery_city": "Freising", "brewery_country": "Germany", "style": "Helles", "abv": 5.1, "ibu": 24, "description": "Premium lager.", "category": "German Lager" },
+    
+    { "id": 20, "name": "Radeberger Pilsner", "brewery": "Radeberger", "brewery_city": "Radeberg", "brewery_country": "Germany", "style": "Pilsner", "abv": 4.8, "ibu": 33, "description": "Germany's first Pilsner brewery.", "category": "German Lager" },
+    
+    { "id": 21, "name": "Veltins Pilsener", "brewery": "Veltins", "brewery_city": "Grevenstein", "brewery_country": "Germany", "style": "Pilsner", "abv": 4.9, "ibu": 30, "description": "Crisp Pilsner from the Sauerland.", "category": "German Lager" },
+    
+    { "id": 22, "name": "Erdinger Weissbier", "brewery": "Erdinger", "brewery_city": "Erding", "brewery_country": "Germany", "style": "Weizen", "abv": 5.3, "ibu": 12, "description": "World's best-selling wheat beer.", "category": "German Wheat Beer" },
+    { "id": 23, "name": "Erdinger Alkoholfrei", "brewery": "Erdinger", "brewery_city": "Erding", "brewery_country": "Germany", "style": "Non-alcoholic", "abv": 0.0, "ibu": 8, "description": "Alcohol-free wheat beer.", "category": "Non-alcoholic" },
+    
+    { "id": 24, "name": "Jever Pilsener", "brewery": "Jever", "brewery_city": "Jever", "brewery_country": "Germany", "style": "Pilsner", "abv": 4.9, "ibu": 40, "description": "Frisian Pilsner with distinctive bitterness.", "category": "German Lager" },
+    
+    { "id": 25, "name": "Hasseröder Premium Pils", "brewery": "Hasseröder", "brewery_city": "Wernigerode", "brewery_country": "Germany", "style": "Pilsner", "abv": 4.9, "ibu": 28, "description": "Pilsner from the Harz mountains.", "category": "German Lager" },
+    
+    { "id": 26, "name": "König Pilsener", "brewery": "König", "brewery_city": "Duisburg", "brewery_country": "Germany", "style": "Pilsner", "abv": 4.9, "ibu": 35, "description": "Classic Pilsner from the Ruhr area.", "category": "German Lager" },
+    
+    { "id": 27, "name": "Oettinger Pils", "brewery": "Oettinger", "brewery_city": "Oettingen", "brewery_country": "Germany", "style": "Pilsner", "abv": 4.9, "ibu": 25, "description": "Germany's best-selling beer brand.", "category": "German Lager" },
+    { "id": 28, "name": "Oettinger Export", "brewery": "Oettinger", "brewery_city": "Oettingen", "brewery_country": "Germany", "style": "Export", "abv": 5.4, "ibu": 27, "description": "Full-bodied export beer.", "category": "German Lager" },
+    
+    { "id": 29, "name": "Sternburg Export", "brewery": "Sternburg", "brewery_city": "Leipzig", "brewery_country": "Germany", "style": "Export", "abv": 5.2, "ibu": 26, "description": "East German classic.", "category": "German Lager" },
+    
+    { "id": 30, "name": "Berliner Kindl Pils", "brewery": "Berliner Kindl", "brewery_city": "Berlin", "brewery_country": "Germany", "style": "Pilsner", "abv": 4.8, "ibu": 29, "description": "Berlin's traditional beer.", "category": "German Lager" },
+    { "id": 31, "name": "Berliner Kindl Weisse", "brewery": "Berliner Kindl", "brewery_city": "Berlin", "brewery_country": "Germany", "style": "Berliner Weisse", "abv": 3.0, "ibu": 6, "description": "Traditional Berlin sour wheat beer.", "category": "Sour Beer" },
+    
+    { "id": 32, "name": "Rothaus Pils", "brewery": "Rothaus", "brewery_city": "Grafenhausen", "brewery_country": "Germany", "style": "Pilsner", "abv": 5.1, "ibu": 32, "description": "Black Forest Pilsner.", "category": "German Lager" },
+    
+    { "id": 33, "name": "Flensburger Pilsener", "brewery": "Flensburger", "brewery_city": "Flensburg", "brewery_country": "Germany", "style": "Pilsner", "abv": 4.8, "ibu": 31, "description": "Northern German Pilsner with swing-top bottle.", "category": "German Lager" },
+    
+    { "id": 34, "name": "Augustiner Helles", "brewery": "Augustiner", "brewery_city": "Munich", "brewery_country": "Germany", "style": "Helles", "abv": 5.2, "ibu": 22, "description": "Munich's favorite beer.", "category": "German Lager" },
+    { "id": 35, "name": "Augustiner Weißbier", "brewery": "Augustiner", "brewery_city": "Munich", "brewery_country": "Germany", "style": "Weizen", "abv": 5.4, "ibu": 13, "description": "Munich wheat beer.", "category": "German Wheat Beer" },
+    
+    { "id": 36, "name": "Andechs Spezial Hell", "brewery": "Andechs", "brewery_city": "Andechs", "brewery_country": "Germany", "style": "Helles", "abv": 5.9, "ibu": 24, "description": "Monastery beer from Bavaria.", "category": "German Lager" },
+    { "id": 37, "name": "Andechs Doppelbock Dunkel", "brewery": "Andechs", "brewery_city": "Andechs", "brewery_country": "Germany", "style": "Doppelbock", "abv": 7.1, "ibu": 26, "description": "Strong dark monastery beer.", "category": "Bock Beer" },
+    
+    { "id": 38, "name": "Ayinger Bräu Weisse", "brewery": "Ayinger", "brewery_city": "Aying", "brewery_country": "Germany", "style": "Weizen", "abv": 5.1, "ibu": 12, "description": "Bavarian wheat beer.", "category": "German Wheat Beer" },
+    { "id": 39, "name": "Ayinger Celebrator", "brewery": "Ayinger", "brewery_city": "Aying", "brewery_country": "Germany", "style": "Doppelbock", "abv": 6.7, "ibu": 24, "description": "World-famous doppelbock.", "category": "Bock Beer" },
+    
+    { "id": 40, "name": "Schneider Weisse Original", "brewery": "Schneider Weisse", "brewery_city": "Kelheim", "brewery_country": "Germany", "style": "Weizen", "abv": 5.4, "ibu": 14, "description": "Original Bavarian wheat beer.", "category": "German Wheat Beer" },
+    { "id": 41, "name": "Schneider Aventinus", "brewery": "Schneider Weisse", "brewery_city": "Kelheim", "brewery_country": "Germany", "style": "Weizenbock", "abv": 8.2, "ibu": 16, "description": "Strong wheat doppelbock.", "category": "Bock Beer" },
+    
+    { "id": 42, "name": "Köstritzer Schwarzbier", "brewery": "Köstritzer", "brewery_city": "Bad Köstritz", "brewery_country": "Germany", "style": "Schwarzbier", "abv": 4.8, "ibu": 22, "description": "Germany's most famous black beer.", "category": "Dark Lager" },
+    
+    { "id": 43, "name": "Maisel's Weisse Original", "brewery": "Maisel's", "brewery_city": "Bayreuth", "brewery_country": "Germany", "style": "Weizen", "abv": 5.4, "ibu": 13, "description": "Franconian wheat beer.", "category": "German Wheat Beer" },
+    
+    { "id": 44, "name": "Tannenzäpfle Pils", "brewery": "Badische Staatsbrauerei Rothaus", "brewery_city": "Grafenhausen", "brewery_country": "Germany", "style": "Pilsner", "abv": 5.1, "ibu": 32, "description": "Black Forest Pilsner in small bottle.", "category": "German Lager" },
+    
+    { "id": 45, "name": "Licher Pils", "brewery": "Licher", "brewery_city": "Lich", "brewery_country": "Germany", "style": "Pilsner", "abv": 4.9, "ibu": 30, "description": "Hessian Pilsner.", "category": "German Lager" },
+    
+    { "id": 46, "name": "Einbecker Ur-Bock", "brewery": "Einbecker", "brewery_city": "Einbeck", "brewery_country": "Germany", "style": "Bock", "abv": 6.5, "ibu": 28, "description": "Original bock beer from the birthplace of bock.", "category": "Bock Beer" },
+    
+    { "id": 47, "name": "Schlenkerla Rauchbier", "brewery": "Schlenkerla", "brewery_city": "Bamberg", "brewery_country": "Germany", "style": "Rauchbier", "abv": 5.1, "ibu": 20, "description": "Traditional smoked beer from Bamberg.", "category": "Smoked Beer" },
+    
+    { "id": 48, "name": "Gaffel Kölsch", "brewery": "Gaffel", "brewery_city": "Cologne", "brewery_country": "Germany", "style": "Kölsch", "abv": 4.8, "ibu": 18, "description": "Cologne-style top-fermented beer.", "category": "Kölsch" },
+    
+    { "id": 49, "name": "Früh Kölsch", "brewery": "Früh", "brewery_city": "Cologne", "brewery_country": "Germany", "style": "Kölsch", "abv": 4.8, "ibu": 18, "description": "Cologne beer served in traditional bars.", "category": "Kölsch" },
+    
+    { "id": 50, "name": "Schöfferhofer Weizen", "brewery": "Schöfferhofer", "brewery_city": "Frankfurt", "brewery_country": "Germany", "style": "Weizen", "abv": 5.0, "ibu": 12, "description": "Wheat beer with smooth taste.", "category": "German Wheat Beer" },
+    { "id": 51, "name": "Schöfferhofer Grapefruit", "brewery": "Schöfferhofer", "brewery_city": "Frankfurt", "brewery_country": "Germany", "style": "Weizenmix", "abv": 2.5, "ibu": 8, "description": "Wheat beer with grapefruit.", "category": "Mixed Beer" },
+    
+    
+    { "id": 52, "name": "Gösser Naturgold", "brewery": "Gösser", "brewery_city": "Göss", "brewery_country": "Austria", "style": "Lager", "abv": 5.2, "ibu": 24, "description": "Austrian premium lager.", "category": "Austrian Lager" },
+    { "id": 53, "name": "Gösser Stiftsbräu", "brewery": "Gösser", "brewery_city": "Göss", "brewery_country": "Austria", "style": "Märzen", "abv": 5.3, "ibu": 26, "description": "Traditional Austrian Märzen.", "category": "Austrian Lager" },
+    
+    { "id": 54, "name": "Stiegl Goldbräu", "brewery": "Stiegl", "brewery_city": "Salzburg", "brewery_country": "Austria", "style": "Lager", "abv": 4.9, "ibu": 22, "description": "Austria's most popular beer.", "category": "Austrian Lager" },
+    { "id": 55, "name": "Stiegl Weisse", "brewery": "Stiegl", "brewery_city": "Salzburg", "brewery_country": "Austria", "style": "Weizen", "abv": 5.1, "ibu": 12, "description": "Austrian wheat beer.", "category": "Wheat Beer" },
+    
+    { "id": 56, "name": "Ottakringer Helles", "brewery": "Ottakringer", "brewery_city": "Vienna", "brewery_country": "Austria", "style": "Helles", "abv": 5.2, "ibu": 23, "description": "Vienna's traditional beer.", "category": "Austrian Lager" },
+    { "id": 57, "name": "Ottakringer Gold Fassl", "brewery": "Ottakringer", "brewery_city": "Vienna", "brewery_country": "Austria", "style": "Spezial", "abv": 5.6, "ibu": 25, "description": "Special beer from Vienna.", "category": "Austrian Lager" },
+    
+    { "id": 58, "name": "Zipfer Urtyp", "brewery": "Zipfer", "brewery_city": "Zipf", "brewery_country": "Austria", "style": "Lager", "abv": 5.4, "ibu": 26, "description": "Upper Austrian beer.", "category": "Austrian Lager" },
+    
+    { "id": 59, "name": "Schwechater Zwickl", "brewery": "Schwechater", "brewery_city": "Schwechat", "brewery_country": "Austria", "style": "Zwickl", "abv": 5.0, "ibu": 20, "description": "Unfiltered Austrian beer.", "category": "Austrian Lager" },
+    
+    { "id": 60, "name": "Murauer Märzen", "brewery": "Murauer", "brewery_city": "Murau", "brewery_country": "Austria", "style": "Märzen", "abv": 5.2, "ibu": 24, "description": "Styrian beer.", "category": "Austrian Lager" },
+    
+    { "id": 61, "name": "Egger Bier", "brewery": "Egger", "brewery_city": "Linz", "brewery_country": "Austria", "style": "Lager", "abv": 5.1, "ibu": 22, "description": "Upper Austrian beer.", "category": "Austrian Lager" }
+  ]
+}

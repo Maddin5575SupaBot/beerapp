@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { FaStar, FaTrophy, FaBeer, FaMapMarkerAlt, FaGlobe, FaSmile, FaLaugh, FaHeart, FaFire } from 'react-icons/fa'
+import { FaStar, FaTrophy, FaBeer, FaMapMarkerAlt, FaGlobe, FaSmile, FaLaugh, FaHeart, FaFire, FaSearch, FaBuilding, FaChevronDown } from 'react-icons/fa'
 import { useLanguage } from '../contexts/LanguageContext'
+import germanAustrianBeerService from '../services/germanAustrianBeerService'
 
 // Simple country detection with flags
 const COUNTRIES = [
@@ -80,7 +81,13 @@ const FunBeerRating = () => {
   const { t } = useLanguage()
   const [rating, setRating] = useState(0)
   const [selectedCountry, setSelectedCountry] = useState(null)
-  const [beerName, setBeerName] = useState('')
+  const [selectedBrewery, setSelectedBrewery] = useState(null)
+  const [selectedBeer, setSelectedBeer] = useState(null)
+  const [breweries, setBreweries] = useState([])
+  const [beers, setBeers] = useState([])
+  const [showBreweryDropdown, setShowBreweryDropdown] = useState(false)
+  const [showBeerDropdown, setShowBeerDropdown] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
   const [showTopBeers, setShowTopBeers] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [randomEmoji, setRandomEmoji] = useState('🍺')
@@ -101,6 +108,35 @@ const FunBeerRating = () => {
     
     return () => clearInterval(interval)
   }, [])
+
+  // Load breweries when country is selected (focus on DE/AT)
+  useEffect(() => {
+    if (selectedCountry) {
+      // For Germany and Austria, use our local database
+      if (selectedCountry.code === 'DE' || selectedCountry.code === 'AT') {
+        const countryBreweries = germanAustrianBeerService.getBreweriesByCountry(selectedCountry.code)
+        setBreweries(countryBreweries)
+      } else {
+        // For other countries, show message or use alternative
+        setBreweries([])
+      }
+      
+      // Reset selections when country changes
+      setSelectedBrewery(null)
+      setSelectedBeer(null)
+      setBeers([])
+    }
+  }, [selectedCountry])
+
+  // Load beers when brewery is selected
+  useEffect(() => {
+    if (selectedBrewery) {
+      // Get beers for this brewery from our service
+      const breweryBeers = germanAustrianBeerService.getBeersByBrewery(selectedBrewery.name)
+      setBeers(breweryBeers)
+      setSelectedBeer(null) // Reset beer selection when brewery changes
+    }
+  }, [selectedBrewery])
 
   const detectCountry = async () => {
     // Try geolocation first
@@ -191,20 +227,22 @@ const FunBeerRating = () => {
       return
     }
     
-    if (!beerName.trim()) {
-      // Fun alert for missing beer name
-      alert('🍺 Please enter the beer name to identify top beers!')
+    if (!selectedBeer) {
+      // Fun alert for missing beer selection
+      alert('🍺 Please select a specific beer to rate!')
       return
     }
     
     setIsSubmitting(true)
     
-    // Beer name is now mandatory
-    const beerToRate = beerName.trim()
-    
     // Save rating locally
     const ratingData = {
-      beer: beerToRate,
+      beer: selectedBeer.name,
+      beerId: selectedBeer.id,
+      brewery: selectedBrewery.name,
+      breweryId: selectedBrewery.id,
+      style: selectedBeer.style,
+      abv: selectedBeer.abv,
       rating,
       country: selectedCountry,
       timestamp: new Date().toISOString(),
@@ -220,9 +258,9 @@ const FunBeerRating = () => {
       setIsSubmitting(false)
       setShowTopBeers(true)
       
-      // Reset for next rating (keep country)
+      // Reset for next rating (keep country and brewery)
       setRating(0)
-      setBeerName('')
+      setSelectedBeer(null)
     }, 800)
   }
 
@@ -341,7 +379,7 @@ const FunBeerRating = () => {
         </div>
       </motion.div>
 
-      {/* Simple Beer Input - MANDATORY */}
+      {/* Brewery & Beer Selection - MANDATORY */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -350,50 +388,211 @@ const FunBeerRating = () => {
       >
         <div className="text-center mb-4">
           <label className="text-gray-300 text-lg">
-            Which beer are you rating? *
+            Select a specific beer to rate *
           </label>
+          <p className="text-gray-400 text-sm mt-1">
+            Choose brewery first, then select the specific beer
+          </p>
         </div>
-        <input
-          type="text"
-          value={beerName}
-          onChange={(e) => setBeerName(e.target.value)}
-          placeholder="Enter beer brand/name"
-          className={`input-beer w-full text-center text-xl py-4 ${
-            beerName.trim() ? 'border-beer-amber' : 'border-red-500/50'
-          }`}
-          maxLength={30}
-          required
-        />
-        <div className="text-center mt-2 text-sm">
-          {beerName.trim() ? (
-            <span className="text-green-400">✓ Got it!</span>
-          ) : (
-            <span className="text-red-400">Required to identify top beers</span>
-          )}
+
+        {/* Brewery Selection */}
+        <div className="mb-6">
+          <div className="flex items-center gap-2 mb-2">
+            <FaBuilding className="text-beer-amber" />
+            <label className="text-gray-300">1. Select Brewery</label>
+          </div>
+          
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setShowBreweryDropdown(!showBreweryDropdown)}
+              className={`input-beer w-full text-left py-3 px-4 flex items-center justify-between ${
+                selectedBrewery ? 'border-beer-amber' : 'border-gray-600'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                {selectedBrewery ? (
+                  <>
+                    <div className="w-8 h-8 bg-beer-amber/20 rounded flex items-center justify-center">
+                      <FaBuilding className="text-beer-amber" />
+                    </div>
+                    <div>
+                      <div className="text-white font-medium">{selectedBrewery.name}</div>
+                      <div className="text-gray-400 text-sm">{selectedBrewery.city}</div>
+                    </div>
+                  </>
+                ) : (
+                  <span className="text-gray-400">Select a brewery...</span>
+                )}
+              </div>
+              <FaChevronDown className={`text-gray-400 transition-transform ${showBreweryDropdown ? 'rotate-180' : ''}`} />
+            </button>
+            
+            {showBreweryDropdown && (
+              <div className="absolute z-10 mt-1 w-full bg-beer-dark border border-beer-amber/20 rounded-lg shadow-xl max-h-64 overflow-y-auto">
+                {breweries.length > 0 ? (
+                  breweries.map(brewery => (
+                    <button
+                      key={brewery.id}
+                      type="button"
+                      onClick={() => {
+                        setSelectedBrewery(brewery)
+                        setShowBreweryDropdown(false)
+                      }}
+                      className="w-full px-4 py-3 flex items-center gap-3 hover:bg-beer-brown/30 transition-colors text-left border-b border-beer-amber/10 last:border-b-0"
+                    >
+                      <div className="w-8 h-8 bg-beer-amber/20 rounded flex items-center justify-center">
+                        <FaBuilding className="text-beer-amber" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="text-white font-medium">{brewery.name}</div>
+                        <div className="text-gray-400 text-sm">{brewery.city} • Founded {brewery.founded}</div>
+                      </div>
+                    </button>
+                  ))
+                ) : selectedCountry && (selectedCountry.code === 'DE' || selectedCountry.code === 'AT') ? (
+                  <div className="px-4 py-3 text-gray-400 text-center">
+                    Loading breweries from {selectedCountry.name}...
+                  </div>
+                ) : (
+                  <div className="px-4 py-3 text-gray-400 text-center">
+                    Focus on German & Austrian beers. Switch to DE or AT for best selection.
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
-        
-        {/* Popular beer suggestions */}
-        {selectedCountry && (
-          <div className="mt-4">
-            <div className="text-center text-gray-400 text-sm mb-2">
-              Popular in {selectedCountry.name}:
+
+        {/* Beer Selection (only shown when brewery is selected) */}
+        {selectedBrewery && (
+          <div className="mb-4">
+            <div className="flex items-center gap-2 mb-2">
+              <FaBeer className="text-beer-amber" />
+              <label className="text-gray-300">2. Select Specific Beer</label>
             </div>
-            <div className="flex flex-wrap justify-center gap-2">
-              {(POPULAR_BEER_SUGGESTIONS[selectedCountry.code] || POPULAR_BEER_SUGGESTIONS.default)
-                .slice(0, 4)
-                .map(beer => (
-                <button
-                  key={beer}
-                  type="button"
-                  onClick={() => setBeerName(beer)}
-                  className="px-3 py-1.5 bg-beer-dark/50 text-gray-300 rounded-lg text-sm hover:bg-beer-dark transition-colors"
-                >
-                  {beer}
-                </button>
-              ))}
+            
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setShowBeerDropdown(!showBeerDropdown)}
+                className={`input-beer w-full text-left py-3 px-4 flex items-center justify-between ${
+                  selectedBeer ? 'border-beer-amber' : 'border-gray-600'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  {selectedBeer ? (
+                    <>
+                      <div className="w-8 h-8 bg-beer-yellow/20 rounded flex items-center justify-center">
+                        <FaBeer className="text-beer-yellow" />
+                      </div>
+                      <div>
+                        <div className="text-white font-medium">{selectedBeer.name}</div>
+                        <div className="text-gray-400 text-sm">{selectedBeer.style} • {selectedBeer.abv}% ABV</div>
+                      </div>
+                    </>
+                  ) : (
+                    <span className="text-gray-400">Select a beer from {selectedBrewery.name}...</span>
+                  )}
+                </div>
+                <FaChevronDown className={`text-gray-400 transition-transform ${showBeerDropdown ? 'rotate-180' : ''}`} />
+              </button>
+              
+              {showBeerDropdown && (
+                <div className="absolute z-10 mt-1 w-full bg-beer-dark border border-beer-amber/20 rounded-lg shadow-xl max-h-64 overflow-y-auto">
+                  {beers.map(beer => (
+                    <button
+                      key={beer.id}
+                      type="button"
+                      onClick={() => {
+                        setSelectedBeer(beer)
+                        setShowBeerDropdown(false)
+                      }}
+                      className="w-full px-4 py-3 flex items-center gap-3 hover:bg-beer-brown/30 transition-colors text-left border-b border-beer-amber/10 last:border-b-0"
+                    >
+                      <div className="w-8 h-8 bg-beer-yellow/20 rounded flex items-center justify-center">
+                        <FaBeer className="text-beer-yellow" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="text-white font-medium">{beer.name}</div>
+                        <div className="text-gray-400 text-sm">{beer.style} • {beer.abv}% ABV</div>
+                        {beer.description && (
+                          <div className="text-gray-500 text-xs mt-1">{beer.description}</div>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
+            
+            {/* Beer details when selected */}
+            {selectedBeer && (
+              <div className="mt-3 p-4 bg-beer-dark/30 rounded-lg border border-beer-amber/20">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h4 className="text-white font-semibold">{selectedBeer.name}</h4>
+                    <div className="text-gray-400 text-sm mt-1">
+                      <span className="inline-block px-2 py-1 bg-beer-amber/20 text-beer-amber rounded text-xs mr-2">
+                        {selectedBeer.style}
+                      </span>
+                      <span className="inline-block px-2 py-1 bg-beer-yellow/20 text-beer-yellow rounded text-xs">
+                        {selectedBeer.abv}% ABV
+                      </span>
+                    </div>
+                    {selectedBeer.description && (
+                      <p className="text-gray-300 text-sm mt-2">{selectedBeer.description}</p>
+                    )}
+                  </div>
+                  <div className="text-3xl">{randomEmoji}</div>
+                </div>
+              </div>
+            )}
           </div>
         )}
+
+        {/* Search for other beers */}
+        <div className="mt-4">
+          <div className="text-center text-gray-400 text-sm mb-2">
+            Can't find your beer? Search all beers:
+          </div>
+          <div className="flex gap-2">
+            <div className="flex-1 relative">
+              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search beers by name..."
+                className="input-beer w-full pl-10 pr-4"
+              />
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                if (searchQuery.trim()) {
+                  const results = germanAustrianBeerService.searchBeers(searchQuery)
+                  if (results.length > 0) {
+                    const firstResult = results[0]
+                    // Find the brewery for this beer
+                    const breweries = germanAustrianBeerService.getBreweries()
+                    const brewery = breweries.find(b => b.name === firstResult.brewery)
+                    if (brewery) {
+                      setSelectedBrewery(brewery)
+                      // Find the specific beer in brewery's beers
+                      const beer = brewery.beers.find(b => b.id === firstResult.id)
+                      setSelectedBeer(beer)
+                      setSearchQuery('')
+                    }
+                  }
+                }
+              }}
+              className="btn-secondary px-4"
+            >
+              Search
+            </button>
+          </div>
+        </div>
       </motion.div>
 
       {/* Star Rating - Fun & Big */}
@@ -452,12 +651,12 @@ const FunBeerRating = () => {
         className="text-center"
       >
         <motion.button
-          whileHover={{ scale: (rating > 0 && beerName.trim()) ? 1.05 : 1 }}
-          whileTap={{ scale: (rating > 0 && beerName.trim()) ? 0.95 : 1 }}
+          whileHover={{ scale: (rating > 0 && selectedBeer) ? 1.05 : 1 }}
+          whileTap={{ scale: (rating > 0 && selectedBeer) ? 0.95 : 1 }}
           onClick={handleSubmit}
-          disabled={rating === 0 || !beerName.trim() || isSubmitting}
+          disabled={rating === 0 || !selectedBeer || isSubmitting}
           className={`text-2xl font-bold py-4 px-8 rounded-2xl transition-all ${
-            (rating > 0 && beerName.trim())
+            (rating > 0 && selectedBeer)
               ? 'bg-gradient-to-r from-beer-amber to-beer-yellow text-beer-dark hover:shadow-2xl hover:shadow-beer-yellow/30'
               : 'bg-gray-700 text-gray-400 cursor-not-allowed'
           }`}
@@ -467,13 +666,13 @@ const FunBeerRating = () => {
               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-beer-dark"></div>
               Submitting...
             </span>
-          ) : (rating > 0 && beerName.trim()) ? (
+          ) : (rating > 0 && selectedBeer) ? (
             <span className="flex items-center gap-2">
               <FaStar />
               Submit Rating!
             </span>
           ) : (
-            <span>Rate & enter beer name</span>
+            <span>Rate & select beer</span>
           )}
         </motion.button>
         
